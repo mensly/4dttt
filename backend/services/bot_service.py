@@ -68,7 +68,9 @@ def fill_room_with_bots(room_code: str, target_count: int = 5) -> int:
             break  # No available symbols
         
         bot_id = str(uuid.uuid4())
-        bot_name = f"Bot-{bots_added + 1}"
+        # Use generic bot names
+        bot_names = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon']
+        bot_name = f"AI {bot_names[bots_added]}" if bots_added < len(bot_names) else f"AI Bot {bots_added + 1}"
         
         add_player_to_room(
             room_code=room_code,
@@ -83,13 +85,15 @@ def fill_room_with_bots(room_code: str, target_count: int = 5) -> int:
     return bots_added
 
 
-def execute_bot_move_if_needed(room_code: str, game: Optional[Game] = None) -> bool:
+def execute_bot_move_if_needed(room_code: str, game: Optional[Game] = None, max_sequential_moves: int = 10) -> bool:
     """
     Execute a bot move if the current player is a bot.
+    Can execute multiple sequential bot moves if consecutive players are bots.
     
     Args:
         room_code: Room code
         game: Optional game instance (will be loaded if not provided)
+        max_sequential_moves: Maximum number of bot moves to execute in sequence (prevents infinite loops)
         
     Returns:
         True if a bot move was executed, False otherwise
@@ -100,31 +104,45 @@ def execute_bot_move_if_needed(room_code: str, game: Optional[Game] = None) -> b
     if game.state.value != "playing":
         return False
     
-    current_player = game.get_current_player()
-    if current_player is None or not current_player.is_bot:
-        return False
+    moves_executed = 0
     
-    # Create AI instance for bot
-    # Use SimpleAI for now (can be made configurable)
-    ai = SimpleAI(current_player.symbol, current_player.player_name)
+    # Execute bot moves sequentially until a human player's turn or game ends
+    while moves_executed < max_sequential_moves:
+        current_player = game.get_current_player()
+        if current_player is None or not current_player.is_bot:
+            break  # Not a bot's turn, stop
+        
+        if game.state.value != "playing":
+            break  # Game ended
+        
+        # Create AI instance for bot
+        # Use SimpleAI for now (can be made configurable)
+        ai = SimpleAI(current_player.symbol, current_player.player_name)
+        
+        # Get move from AI
+        try:
+            board = game.get_board_copy()
+            w, x, y, z = ai.get_move(board)
+            
+            # Process the move
+            success, error, game_info = process_move(room_code, current_player.player_id, w, x, y, z)
+            
+            if not success:
+                print(f"Bot move failed for {current_player.player_name}: {error}")
+                break
+            
+            moves_executed += 1
+            
+            # If game ended, stop
+            if game_info.get('state') != 'playing':
+                break
+            
+            # Reload game state for next iteration
+            game = initialize_game_from_room(room_code)
+            
+        except Exception as e:
+            print(f"Error executing bot move for {current_player.player_name}: {e}")
+            break
     
-    # Get move from AI
-    try:
-        board = game.get_board_copy()
-        w, x, y, z = ai.get_move(board)
-        
-        # Process the move
-        success, error, game_info = process_move(room_code, current_player.player_id, w, x, y, z)
-        
-        if success:
-            # If game continues and next player is also a bot, execute recursively
-            # But limit depth to avoid infinite loops
-            if game_info.get('state') == 'playing':
-                # Small delay would be nice but we'll skip for now
-                pass
-        
-        return success
-    except Exception as e:
-        print(f"Error executing bot move: {e}")
-        return False
+    return moves_executed > 0
 

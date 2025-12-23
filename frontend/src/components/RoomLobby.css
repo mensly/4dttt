@@ -1,0 +1,85 @@
+.room-code-display {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.room-code-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.room-code {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.3em;
+  color: #667eea;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: all;
+}
+
+.room-code:hover {
+  background: #e9ecef;
+}
+
+.player-list-section {
+  margin: 2rem 0;
+}
+
+.player-list {
+  list-style: none;
+  padding: 0;
+}
+
+.player-item {
+  padding: 1rem;
+  margin: 0.75rem 0;
+  background: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.player-item:hover {
+  border-color: #667eea;
+}
+
+.player-symbol {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.bot-badge {
+  background: #6c757d;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.you-badge {
+  background: #667eea;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.info {
+  background: #e7f3ff;
+  color: #004085;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  text-align: center;
+}
+

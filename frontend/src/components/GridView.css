@@ -1,0 +1,122 @@
+.grid-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.grid-header {
+  margin-bottom: 0.5rem;
+}
+
+.grid-header-row {
+  display: flex;
+  gap: 2px;
+}
+
+.grid-header-cell {
+  width: 40px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.grid-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.grid-row {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.grid-row-label {
+  width: 30px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.grid-cell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: white;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.grid-cell.empty {
+  color: #ccc;
+  cursor: pointer;
+}
+
+.grid-cell.filled {
+  cursor: default;
+}
+
+.grid-cell.clickable.empty {
+  cursor: pointer;
+}
+
+.grid-cell.clickable.empty:hover {
+  background: #f0f0f0;
+  border-color: #667eea;
+  transform: scale(1.1);
+}
+
+/* Filled cells should always be fully opaque, even when disabled */
+.grid-cell.filled {
+  opacity: 1 !important;
+  cursor: default !important;
+}
+
+/* Only empty disabled cells (when not your turn) should have reduced opacity */
+.grid-cell.disabled.empty {
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  background: #f8f9fa;
+}
+
+.grid-cell.disabled.empty:hover {
+  transform: none;
+  border-color: #ddd;
+  background: #f8f9fa;
+}
+
+/* Highlight mini-board boundaries */
+.grid-row:nth-child(3n) .grid-cell,
+.grid-row:nth-child(3n+1) .grid-cell {
+  border-bottom: 2px solid #bbb;
+}
+
+.grid-cell:nth-child(3n),
+.grid-cell:nth-child(3n+1) {
+  border-right: 2px solid #bbb;
+}
+
+.grid-legend {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.6;
+}
+

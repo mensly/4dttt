@@ -1,0 +1,146 @@
+.game-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 1200px;
+  width: 100%;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.game-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.room-code-small {
+  font-family: monospace;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.game-status {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.turn-indicator {
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.your-turn {
+  background: #d4edda;
+  color: #155724;
+  border: 2px solid #c3e6cb;
+}
+
+.opponent-turn {
+  background: #fff3cd;
+  color: #856404;
+  border: 2px solid #ffeaa7;
+}
+
+.game-finished {
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.winner-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.loser-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+
+.draw-message {
+  background: #e2e3e5;
+  color: #383d41;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+
+.view-mode-toggle {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.view-mode-toggle button {
+  width: auto;
+  padding: 0.5rem 1.5rem;
+}
+
+.view-mode-toggle button.active {
+  background: #667eea;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+.view-mode-toggle button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.board-container {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.coming-soon {
+  text-align: center;
+  padding: 4rem;
+  color: #999;
+  font-size: 1.2rem;
+}
+
+.game-info {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.player-list-small {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.player-badge {
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  border: 2px solid transparent;
+}
+
+.player-badge.you {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+

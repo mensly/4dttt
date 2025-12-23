@@ -7,6 +7,7 @@ import uuid
 from fastapi import APIRouter, HTTPException
 from typing import List
 from datetime import datetime
+from game.core.game import Game
 
 from backend.models.game import (
     RoomCreateRequest,
@@ -172,13 +173,16 @@ async def start_room_game(room_code: str):
         if bots_added > 0:
             players = get_players_by_room(room_code.upper())  # Refresh player list
     
-    # Initialize game
+    # Initialize game and start it
     try:
-        initialize_game_from_room(room_code.upper())
+        game = initialize_game_from_room(room_code.upper())
+        # Start the game (this sets game.state to PLAYING)
+        if not game.start_game():
+            raise HTTPException(status_code=500, detail="Failed to start game")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to initialize game: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to initialize/start game: {str(e)}")
     
-    # Update room state
+    # Update room state in database
     update_room(
         room_code.upper(),
         state="playing",
@@ -203,4 +207,76 @@ async def get_room_board(room_code: str):
         return game_state
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/rooms/{room_code}/add-bot")
+async def add_bot_to_room(room_code: str):
+    """
+    Add an AI bot player to the room.
+    
+    Only works if room is in waiting state and hasn't reached max players.
+    """
+    room = get_room_by_code(room_code.upper())
+    
+    if room is None:
+        raise HTTPException(status_code=404, detail="Room not found")
+    
+    if room.state != "waiting":
+        raise HTTPException(status_code=400, detail="Can only add bots while room is waiting")
+    
+    players = get_players_by_room(room_code.upper())
+    
+    if len(players) >= Game.MAX_PLAYERS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Room is full (max {Game.MAX_PLAYERS} players)"
+        )
+    
+    # Generate bot symbol
+    used_symbols = {p.symbol for p in players}
+    bot_symbols = ['🤖', '⚙️', '🎮', '🧠', '⭐', '🎯', '🔥', '⚡']
+    bot_symbol = None
+    
+    for symbol in bot_symbols:
+        if symbol not in used_symbols:
+            bot_symbol = symbol
+            break
+    
+    # Fallback to letter symbols
+    if bot_symbol is None:
+        for char in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+            symbol = f"B{char}"
+            if symbol not in used_symbols:
+                bot_symbol = symbol
+                break
+    
+    if bot_symbol is None:
+        raise HTTPException(status_code=400, detail="No available symbols for bot")
+    
+    # Get generic bot names
+    bot_names = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon']
+    existing_bot_count = len([p for p in players if p.is_bot])
+    bot_name = f"AI {bot_names[existing_bot_count]}" if existing_bot_count < len(bot_names) else f"AI Bot {existing_bot_count + 1}"
+    
+    # Add bot player
+    bot_id = str(uuid.uuid4())
+    
+    add_player_to_room(
+        room_code=room_code.upper(),
+        player_id=bot_id,
+        player_name=bot_name,
+        symbol=bot_symbol,
+        is_bot=True
+    )
+    
+    return {
+        "success": True,
+        "message": f"Bot {bot_name} ({bot_symbol}) added",
+        "bot": {
+            "player_id": bot_id,
+            "player_name": bot_name,
+            "symbol": bot_symbol,
+            "is_bot": True
+        }
+    }
 

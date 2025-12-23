@@ -1,0 +1,33 @@
+/* Reuse styles from RoomCreation */
+.symbol-suggestions {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.symbol-button {
+  background: #e9ecef;
+  color: #333;
+  border: 2px solid #ddd;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: auto;
+}
+
+.symbol-button:hover:not(:disabled) {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.symbol-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

@@ -80,4 +80,5 @@ class GameStateResponse(BaseModel):
     move_count: int
     winner_player_id: Optional[str] = None
     is_draw: bool
+    players: Optional[List[PlayerResponse]] = None
 

@@ -73,6 +73,16 @@ async def get_game_state(room_code: str):
     """Get current game state."""
     try:
         game_state = get_game_state_from_room(room_code.upper())
+        
+        # If it's a bot's turn, execute the bot move
+        if game_state.get('state') == 'playing':
+            from backend.core.game_logic import initialize_game_from_room
+            game = initialize_game_from_room(room_code.upper())
+            # Check if current player is a bot and execute move
+            execute_bot_move_if_needed(room_code.upper(), game)
+            # Refresh game state after potential bot move
+            game_state = get_game_state_from_room(room_code.upper())
+        
         return GameStateResponse(**game_state)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

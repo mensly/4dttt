@@ -78,8 +78,9 @@ def initialize_game_from_room(room_code: str) -> Game:
             if symbol:
                 board.set(move_db.w, move_db.x, move_db.y, move_db.z, symbol)
     
-    # Set game state
+    # Set game state based on room state
     if room_db.state == "playing":
+        # Game is already in progress - restore state
         game.state = GameState.PLAYING
         # Determine current player from move count
         move_count = len(get_moves_by_room(room_code))
@@ -91,6 +92,8 @@ def initialize_game_from_room(room_code: str) -> Game:
         game.state = GameState.FINISHED
         if room_db.winner_player_id:
             game.winner = next((p for p in game.players if p.player_id == room_db.winner_player_id), None)
+    # If room_db.state == "waiting", game.state stays as WAITING
+    # This allows start_game() to be called later to transition to PLAYING
     
     # Store game in memory
     _active_games[room_code] = game
@@ -164,6 +167,20 @@ def get_game_state_from_room(room_code: str) -> Dict[str, Any]:
     """
     game = initialize_game_from_room(room_code)
     
+    # Get players info for response
+    from backend.database.db import get_players_by_room
+    players_db = get_players_by_room(room_code)
+    players_info = [
+        {
+            'player_id': p.player_id,
+            'player_name': p.player_name,
+            'symbol': p.symbol,
+            'is_bot': p.is_bot,
+            'joined_at': p.joined_at.isoformat() if p.joined_at else None
+        }
+        for p in players_db
+    ]
+    
     return {
         'room_code': room_code,
         'state': game.state.value,
@@ -171,6 +188,7 @@ def get_game_state_from_room(room_code: str) -> Dict[str, Any]:
         'board_state': game.board.get_board_state(),
         'move_count': len(game.move_history),
         'winner_player_id': game.winner.player_id if game.winner else None,
-        'is_draw': game.check_game_over() and game.winner is None
+        'is_draw': game.check_game_over() and game.winner is None,
+        'players': players_info
     }
 
