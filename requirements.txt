@@ -1,0 +1,3 @@
+# Phase 1 requirements (minimal - standard library only)
+# Phase 2 will add FastAPI, SQLAlchemy, etc.
+
