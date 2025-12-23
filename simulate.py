@@ -55,6 +55,11 @@ def run_simulation(num_games: int, ai_config: Dict[str, Any], output_file: str =
             
             ai_players.append((player_id, ai))
         
+        # Validate minimum players
+        if len(game.players) < Game.MIN_PLAYERS:
+            print(f"Warning: Game {game_num + 1} has only {len(game.players)} players, need at least {Game.MIN_PLAYERS}. Skipping.")
+            continue
+        
         # Start game
         if not game.start_game():
             print(f"Warning: Failed to start game {game_num + 1}")
@@ -188,14 +193,14 @@ def print_statistics(stats: Dict[str, Any]):
 
 
 if __name__ == "__main__":
-    # Example simulation configuration
+    # Example simulation configuration (minimum 4 players)
     ai_config = {
         'players': [
             {'type': 'simple', 'symbol': 'X', 'name': 'SimpleAI-1'},
             {'type': 'simple', 'symbol': 'O', 'name': 'SimpleAI-2'},
             {'type': 'minimax', 'symbol': 'A', 'name': 'MinimaxAI', 'max_depth': 2},
             {'type': 'simple', 'symbol': 'B', 'name': 'SimpleAI-3'},
-            {'type': 'simple', 'symbol': 'C', 'name': 'SimpleAI-4'}
+            {'type': 'simple', 'symbol': 'C', 'name': 'SimpleAI-4'}  # Optional 5th player
         ],
         'max_moves': 81
     }

@@ -85,17 +85,25 @@ def test_game():
     assert game.state == GameState.WAITING
     assert len(game.players) == 0
     
-    # Test adding players
+    # Test adding players (minimum 4 required)
     assert game.add_player("p1", "Alice", "X") == True
     assert game.add_player("p2", "Bob", "O") == True
     assert game.add_player("p3", "Charlie", "A") == True
-    assert len(game.players) == 3
+    assert game.add_player("p4", "Dave", "B") == True
+    assert len(game.players) == 4
     
     # Test duplicate symbol rejection
-    assert game.add_player("p4", "Dave", "X") == False
+    assert game.add_player("p5", "Eve", "X") == False
     
-    # Test starting game
+    # Test starting game with minimum players
     assert game.start_game() == True
+    
+    # Test that game won't start with less than 4 players
+    game2 = Game()
+    game2.add_player("p1", "Alice", "X")
+    game2.add_player("p2", "Bob", "O")
+    game2.add_player("p3", "Charlie", "A")
+    assert game2.start_game() == False  # Only 3 players, should fail
     assert game.state == GameState.PLAYING
     assert game.get_current_player().player_id == "p1"
     
@@ -170,16 +178,20 @@ def test_full_game():
     print("Testing full game simulation...")
     game = Game()
     
-    # Add AI players
+    # Add AI players (minimum 4 required)
     game.add_player("ai1", "Simple1", "X", is_bot=True)
     game.add_player("ai2", "Simple2", "O", is_bot=True)
+    game.add_player("ai3", "Simple3", "A", is_bot=True)
+    game.add_player("ai4", "Simple4", "B", is_bot=True)
     
     assert game.start_game() == True
     
     # Create AI instances
     ai1 = SimpleAI('X', "Simple1")
     ai2 = SimpleAI('O', "Simple2")
-    ai_players = {"ai1": ai1, "ai2": ai2}
+    ai3 = SimpleAI('A', "Simple3")
+    ai4 = SimpleAI('B', "Simple4")
+    ai_players = {"ai1": ai1, "ai2": ai2, "ai3": ai3, "ai4": ai4}
     
     # Play a few moves
     move_count = 0

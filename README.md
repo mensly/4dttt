@@ -1,6 +1,6 @@
 # 4D Tic-Tac-Toe
 
-A 4D Tic-Tac-Toe game played on a 3×3×3×3 hypercube (81 positions total). Supports up to 5 players, with AI bots for training and gameplay.
+A 4D Tic-Tac-Toe game played on a 3×3×3×3 hypercube (81 positions total). Supports 4-5 players (minimum 4 required), with AI bots for training and gameplay.
 
 ## Phase 1: Python Offline Script (Complete)
 

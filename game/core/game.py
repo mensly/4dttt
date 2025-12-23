@@ -41,6 +41,7 @@ class Player:
 class Game:
     """Manages the game state and flow."""
     
+    MIN_PLAYERS = 4
     MAX_PLAYERS = 5
     
     def __init__(self):
@@ -98,7 +99,7 @@ class Game:
         if self.state != GameState.WAITING:
             return False
         
-        if len(self.players) < 1:
+        if len(self.players) < self.MIN_PLAYERS:
             return False
         
         self.state = GameState.PLAYING

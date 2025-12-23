@@ -58,10 +58,10 @@ def setup_game() -> Game:
     print("Game Setup")
     print("-" * 60)
     
-    # Get number of players
+    # Get number of players (minimum 4, maximum 5)
     num_players_input = get_player_input(
-        "Number of players (1-5): ",
-        [str(i) for i in range(1, 6)]
+        "Number of players (4-5): ",
+        ['4', '5']
     )
     num_players = int(num_players_input)
     
