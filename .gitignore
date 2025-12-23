@@ -27,7 +27,8 @@ MANIFEST
 venv/
 ENV/
 env/
-.venv
+# .venv is commonly used, uncomment if you want to ignore it
+# .venv
 
 # IDE
 .vscode/

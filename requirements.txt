@@ -1,3 +1,11 @@
 # Phase 1 requirements (minimal - standard library only)
-# Phase 2 will add FastAPI, SQLAlchemy, etc.
+
+# Phase 2: Web backend
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sqlalchemy>=2.0.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL adapter (optional for production)
+aiosqlite>=0.19.0  # Async SQLite for development
 
