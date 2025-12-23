@@ -106,6 +106,12 @@
   min-height: 400px;
 }
 
+.board-container .tesseract-view {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .coming-soon {
   text-align: center;
   padding: 4rem;

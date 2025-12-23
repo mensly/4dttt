@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { gameAPI } from '../services/api';
 import type { GameState } from '../types';
 import GridView from './GridView';
+import TesseractView from './TesseractView';
 import './GameBoard.css';
 
 function GameBoard() {
@@ -184,7 +185,6 @@ function GameBoard() {
         <button
           className={viewMode === 'tesseract' ? 'active' : ''}
           onClick={() => setViewMode('tesseract')}
-          disabled={true} // TODO: Implement tesseract view
         >
           3D Tesseract
         </button>
@@ -200,9 +200,12 @@ function GameBoard() {
             players={gameState.players || []}
           />
         ) : (
-          <div className="coming-soon">
-            3D Tesseract view coming soon!
-          </div>
+          <TesseractView
+            boardState={gameState.board_state}
+            onCellClick={handleCellClick}
+            disabled={submittingMove || !isMyTurn || gameState.state !== 'playing'}
+            players={gameState.players || []}
+          />
         )}
       </div>
       
