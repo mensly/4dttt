@@ -50,6 +50,11 @@ simulation_results.json
 simulation_stats.json
 *.csv
 
+# Training data (uncompressed - keep compressed versions in repo)
+training_data.json
+training_results.json
+training_stats.json
+
 # Environment variables
 .env
 .env.local

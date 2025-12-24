@@ -14,6 +14,7 @@ sys.path.insert(0, str(project_root))
 from game.core.game import Game
 from game.ai.simple_ai import SimpleAI
 from game.ai.minimax_ai import MinimaxAI
+from game.ai.learned_ai import LearnedAI
 from backend.database.db import add_player_to_room, get_players_by_room, get_room_by_code
 from backend.core.game_logic import initialize_game_from_room, process_move
 
@@ -116,8 +117,17 @@ def execute_bot_move_if_needed(room_code: str, game: Optional[Game] = None, max_
             break  # Game ended
         
         # Create AI instance for bot
-        # Use SimpleAI for now (can be made configurable)
-        ai = SimpleAI(current_player.symbol, current_player.player_name)
+        # Try to use LearnedAI if training data is available, otherwise fall back to SimpleAI
+        try:
+            # Try to load learned AI with training data
+            ai = LearnedAI(current_player.symbol, current_player.player_name)
+            # Check if it actually loaded data (has move_scores)
+            if not ai.move_scores:
+                # No training data loaded, use SimpleAI
+                ai = SimpleAI(current_player.symbol, current_player.player_name)
+        except Exception:
+            # Fallback to SimpleAI if LearnedAI fails
+            ai = SimpleAI(current_player.symbol, current_player.player_name)
         
         # Get move from AI
         try:
